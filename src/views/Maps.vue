@@ -5,14 +5,14 @@
 </template>
 
 <script>
-import { onMounted } from 'vue';
+import { onMounted } from "vue";
 export default {
   setup() {
     onMounted(() => {
-      console.log('render')
-    })
+      console.log("render");
+    });
   },
-}
+};
 </script>
 <style>
 .maps {
@@ -23,6 +23,5 @@ export default {
   right: 0;
   bottom: 0;
   top: 0;
-  
 }
 </style>

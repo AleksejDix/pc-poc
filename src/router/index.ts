@@ -3,10 +3,10 @@ import { h } from "vue";
 import Finding from "../views/Finding.vue";
 import Maps from "../views/Maps.vue";
 import Property from "../views/Property.vue";
-import Matching from "../views/Matching.vue";
-import Favorites from "../views/Favorites.vue";
+
 import Category from "../views/Category.vue";
 import Root from "../views/Root.vue";
+import FeedOrMatching from "../views/FeedOrMatching.vue";
 
 const EmptyComponent = () => h(RouterView);
 EmptyComponent.displayName = "EmptyComponent";
@@ -15,18 +15,18 @@ const routes = [
   {
     path: "/",
     name: "root",
-    component: Root
+    component: Root,
   },
   {
     path: "/finding",
     components: {
       default: Finding,
-      maps: Maps
+      maps: Maps,
     },
     children: [
       {
         path: "",
-        redirect: "/finding/matching"
+        redirect: "/finding/matching",
       },
       {
         path: ":category",
@@ -35,25 +35,42 @@ const routes = [
           {
             path: "",
             name: "category",
-            components: {
-              matching: Matching,
-              favorites: Favorites
-            }
+            component: FeedOrMatching,
           },
           {
             path: ":propertyId",
-            name: "property-id",
-            component: Property
-          }
-        ]
-      }
-    ]
-  }
+            name: "finding-category-propertyid",
+            component: Property,
+          },
+        ],
+      },
+      {
+        path: ":propertyId",
+        name: "finding-propertyid",
+        component: Property,
+      },
+    ],
+  },
 ];
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
-  routes
+  routes,
+});
+
+router.beforeEach((to, from, next) => {
+  console.log("direct-link", from.name === undefined, to);
+
+  if (to.name === "finding-category-propertyid" && from.name === undefined) {
+    next({
+      name: "finding-propertyid",
+      params: {
+        propertyId: to.params.propertyId,
+      },
+    });
+  } else {
+    next();
+  }
 });
 
 export default router;

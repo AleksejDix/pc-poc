@@ -1,21 +1,19 @@
 <template>
-<div class="h-full flex flex-col">
+  <div class="h-full flex flex-col">
+    <nav class="nav">
+      <router-link exact-active-class="active" to="/">root</router-link>
+      <router-link active-class="active" to="/finding">find</router-link>
+    </nav>
 
-      <nav class="nav">
-        <router-link exact-active-class="active" to="/">root</router-link>
-        <router-link active-class="active" to="/finding">find</router-link>
-      </nav>
-
-      <div class="relative flex-grow">
-        <router-view />
-        <router-view name="maps"  />
-      </div>
- 
-</div>
+    <div class="relative flex-grow">
+      <router-view />
+      <router-view name="maps" />
+    </div>
+  </div>
 </template>
 
 <style>
-html, 
+html,
 body,
 .h-full {
   height: 100%;
@@ -37,8 +35,6 @@ body,
   flex-direction: column;
 }
 
-
-
 .container {
   display: flex;
   flex: 1 0 auto;
@@ -50,7 +46,6 @@ body,
   border: 10px solid red;
 }
 
-
 .nav {
   display: flex;
   position: sticky;
@@ -61,17 +56,14 @@ body,
 
 .nav > * {
   padding: 10px;
-
 }
 
 .nav > * + * {
   margin-left: 10px;
-
 }
 
 .active {
   background: black;
   color: white;
 }
-
 </style>

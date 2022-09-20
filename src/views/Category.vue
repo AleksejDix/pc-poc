@@ -1,100 +1,96 @@
 <template>
   <div class="h-full absolute left-0 top-0 right-0 bottom-0 overflow-hidden">
-
-    <router-view :name="$route.params.category" />
-    <router-view >
-
+    <router-view v-slot="{ Component }">
+      <transition :name="propertyTransition">
+        <component :is="Component" :class="$route.name" />
+      </transition>
     </router-view>
-
   </div>
 </template>
 
 <script>
-import { ref, watch } from 'vue'
-import { useRoute } from 'vue-router'
+import { ref, watch } from "vue";
+import { useRoute } from "vue-router";
 
 export default {
   setup() {
+    const propertyTransition = ref("slidedown");
 
-    const tName = ref('slideup')
-    const route = useRoute()
+    const route = useRoute("");
 
-    watch(() => route.path, (to, from) => {
-      const toDepth = to.split('/').length
-      const fromDepth = from.split('/').length
-      tName.value = toDepth < fromDepth ? 'slideup' : 'slidedown'
-    })
+    watch(
+      () => route.path,
+      (to, from) => {
+        const toDepth = to.split("/").length;
+        const fromDepth = from.split("/").length;
+
+        console.log(toDepth, fromDepth);
+
+        propertyTransition.value =
+          toDepth < fromDepth ? "slideup" : "slidedown";
+      }
+    );
 
     return {
-      tName
-    }
-
-  }
-  // watch: {
-  //   $route(to, from) {
-  //     const fromDepth = from.path.split('/').length
-  //     this.transitionName = toDepth < fromDepth ? 'slideup' : 'slidedown'
-  //   },
-  // },
-}
+      propertyTransition,
+    };
+  },
+};
 </script>
 
 <style>
-
-
-.matching-enter-active,
-.matching-leave-active {
-  transition: transform 500ms linear;
-}
-.matching-enter-from {
-  transform: translate3d(-100%, 0, 0);
-}
-.matching-enter-to {
-  transform: translate3d(0, 0, 0);
-}
-
-.matching-leave-to {
-  transform: translate3d(100%, 0, 0);
-}
-
-
-.favorites-enter-active,
-.favorites-leave-active {
-  transition: transform 500ms linear;
-}
-.favorites-enter-from {
-  transform: translate3d(100%, 0, 0);
-}
-.favorites-enter-to {
-  transform: translate3d(0, 0, 0);
-}
-.favorites-leave-from {
-  transform: translate3d(0, 0, 0);
-}
-.favorites-leave-to {
-  transform: translate3d(-100%, 0, 0);
-}
-
 .slideup-enter-active,
-.slideup-leave-active {
-  transition: transform 5s linear;
-}
-.slideup-enter-from {
-  transform: translate3d(0, 100%, 0);
-}
-.slideup-leave-to {
-  transform: translate3d(0, -100%, 0);
-}
-
-
+.slideup-leave-active,
 .slidedown-enter-active,
 .slidedown-leave-active {
-  transition: transform 5s linear;
+  transition: transform 500ms linear;
 }
-.slidedown-enter-from {
+
+.slideup-enter-from.category {
   transform: translate3d(0, -100%, 0);
 }
-.slidedown-leave-to {
+
+/* this one is active closing*/
+.slideup-enter-to.category {
+  transform: translate3d(0, 0, 0);
+}
+
+.slideup-leave-from.category {
+  transform: translate3d(0, 0, 0);
+}
+
+.slideup-leave-to.category {
+  transform: translate3d(0, -100%, 0);
+}
+
+.slideup-enter-from.finding-category-propertyid {
   transform: translate3d(0, 100%, 0);
+}
+.slideup-enter-to.finding-category-propertyid {
+  transform: translate3d(0, 0, 0);
+}
+
+.slideup-leave-from.finding-category-propertyid {
+  transform: translate3d(0, 0, 0);
+}
+
+/* this one is active closing */
+.slideup-leave-to.finding-category-propertyid {
+  transform: translate3d(0, 100%, 0);
+}
+
+.slidedown-leave-from.category {
+  transform: translate3d(0, 0, 0);
+}
+
+.slidedown-leave-to.category {
+  transform: translate3d(0, -100%, 0);
+}
+
+.slidedown-enter-from.finding-category-propertyid {
+  transform: translate3d(0, 100%, 0);
+}
+.slidedown-enter-to.finding-category-propertyid {
+  transform: translate3d(0, 0, 0);
 }
 </style>
